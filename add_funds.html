@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Funds</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: white;
+            margin: 0; 
+        }
+
+        header {
+            background-color: #169BD7;
+            padding: 10px; 
+            color: white; 
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px; 
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none; 
+        }
+
+        .center-box {
+            width: 400px; 
+            height: 300px; 
+            background-color: #f1f1f1; 
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .box-header {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .money-transfer-box {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center; 
+        }
+
+        .transfer-icon {
+            font-size: 40px;
+            color: #169BD7;
+            margin-right: 10px;
+        }
+
+        .transfer-text {
+            font-size: 18px;
+            margin: 0;
+            padding: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="text-decoration: none; color: white;">Welcome to My Financial Services</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="send_request.html">Send and Request</a></li>
+                <li><a href="wallet.html">Wallet</a></li>
+                <li><a href="transaction.html">Transactions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="center-box">
+            <div class="box-header">Funds Out</div>
+            <div class="money-transfer-box" id="fundsOutBtn">
+                <i class="fas fa-exchange-alt transfer-icon"></i>
+                <p><span class="transfer-text">Transfer to your bank account</span></p>
+            </div>
+
+            <div class="box-header">Funds In</div>
+            <div class="money-transfer-box" id="fundsInBtn">
+                <i class="fas fa-plus-circle transfer-icon"></i>
+                <p><span class="transfer-text">Add Money to your Account</span></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function promptAmountAndTransfer(actionType) {
+            const maxAmount = 1000;
+            let amount = parseFloat(prompt(`Enter the amount you want to ${actionType}:`));
+    
+            if (isNaN(amount)) {
+                alert("Invalid amount. Please enter a valid number.");
+                return;
+            }
+    
+            if (amount <= 0) {
+                alert("Amount should be greater than zero.");
+                return;
+            }
+    
+            if (amount > maxAmount) {
+                alert(`You can't ${actionType} more than your Account balance.`);
+                return;
+            }
+    
+            if (actionType === "add funds") {
+                // Update account balance in sessionStorage
+                let currentBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+                currentBalance += amount;
+                sessionStorage.setItem("accountBalance", currentBalance);
+                alert(`Funds added successfully: $${amount}`);
+            } else if (actionType === "transfer funds") {
+                // Update account balance in sessionStorage
+                let currentBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+                if (amount > currentBalance) {
+                    alert("Insufficient funds.");
+                    return;
+                }
+                currentBalance -= amount;
+                sessionStorage.setItem("accountBalance", currentBalance);
+                alert(`Funds transferred successfully: $${amount}`);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const fundsInBtn = document.getElementById("fundsInBtn");
+            const fundsOutBtn = document.getElementById("fundsOutBtn");
+
+            fundsInBtn.addEventListener("click", function () {
+                promptAmountAndTransfer("add funds");
+            });
+
+            fundsOutBtn.addEventListener("click", function () {
+                promptAmountAndTransfer("transfer funds");
+            });
+        });
+    </script>
+</body>
+</html>

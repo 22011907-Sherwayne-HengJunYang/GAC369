@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: white;
+            margin: 0; 
+        }
+        header {
+            background-color: #169BD7;
+            padding: 10px; 
+            color: white; 
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none; 
+        }
+        .center-box {
+            width: 600px;
+            margin: 30px auto; 
+            padding: 20px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 5px; 
+        }
+        .wallet-info {
+            margin-top: 20px;
+        }
+        .wallet-balance {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .transaction-history {
+            margin-top: 10px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .transaction-history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-history th,
+        .transaction-history td {
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .wallet-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .wallet-buttons button {
+            padding: 8px 15px;
+            background-color: #169BD7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wallet-buttons button i {
+            margin-right: 5px;
+        }
+
+        .popup {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); 
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html" style="text-decoration: none; color: white;">Welcome to My Financial Services</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="send_request.html">Send and Request</a></li>
+                <li><a href="wallet.html">Wallet</a></li>
+                <li><a href="transaction.html">Transactions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="center-box">
+            <div class="wallet-info">
+                <p class="wallet-balance" id="walletBalanceDisplay">Wallet Balance: SGD $0.00</p>
+                <div class="transaction-history">
+                    <p><strong>Transaction History:</strong></p>
+                    <table>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Location</th>
+                        </tr>
+                        <tr>
+                            <td>2023-07-30</td>
+                            <td>Purchase at Online Store</td>
+                            <td style="color: red;">-SGD $50.00</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2023-07-29</td>
+                            <td>Received Payment</td>
+                            <td style="color: green;">+SGD $100.00</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2023-07-20</td>
+                            <td>Received Cash</td>
+                            <td style="color: red;">-SGD $100.00</td>
+                            <td>204 Marsiling Dr, #01-204 Marsiling Admiralty Park</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="wallet-buttons">
+                <button onclick="linkToCard()"><i class="fas fa-credit-card"></i>Link to a Card</button>
+                <button onclick="linkToBank()"><i class="fas fa-university"></i>Link to a Bank</button>
+            </div>
+        </div>
+    </main>
+
+
+    <div id="cardLinkPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeCardLinkPopup()">&times;</span>
+            <h2>Link to a Card</h2>
+            <form id="cardLinkForm" onsubmit="submitCardLink(event)">
+                <label for="cardNumber">Card Number:</label>
+                <input type="text" id="cardNumber" required>
+
+                <label for="cardType">Card Type:</label>
+                <select id="cardType" required>
+                    <option value="Visa">Visa</option>
+                    <option value="Mastercard">Mastercard</option>
+                    <option value="American Express">American Express</option>
+                    <option value="Union Pay">Union Pay</option>
+                </select>
+
+                <label for="expirationDate">Expiration Date:</label>
+                <input type="text" id="expirationDate" required>
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" required>
+
+                <label for="billingAddress">Billing Address:</label>
+                <input type="text" id="billingAddress" required>
+
+                <button type="submit">Link Card</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="bankLinkPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeBankLinkPopup()">&times;</span>
+            <h2>Link to a Bank</h2>
+            <form id="bankLinkForm" onsubmit="submitBankLink(event)">
+                <label for="bankName">Bank Name:</label>
+                <input type="text" id="bankName" required>
+
+                <label for="userName">User's Name:</label>
+                <input type="text" id="userName" required>
+
+                <label for="accountType">Account Type:</label>
+                <input type="text" id="accountType" required>
+
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" required>
+
+                <button type="submit">Link Bank</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const transactionHistory = [
+            { date: '2023-07-30', description: 'Purchase at Online Store', amount: -50 },
+            { date: '2023-07-29', description: 'Received Payment', amount: 100 },
+            { date: '2023-07-20', description: 'Received Cash', amount: -100, location: '204 Marsiling Dr, #01-204 Marsiling Admiralty Park' }
+        ];
+
+        // Link to a Card function
+        function linkToCard() {
+            const cardLinkPopup = document.getElementById('cardLinkPopup');
+            cardLinkPopup.style.display = 'block';
+        }
+
+        // Close the card link pop-up
+        function closeCardLinkPopup() {
+            const cardLinkPopup = document.getElementById('cardLinkPopup');
+            cardLinkPopup.style.display = 'none';
+        }
+
+        function submitCardLink(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardType = document.getElementById('cardType').value;
+            const expirationDate = document.getElementById('expirationDate').value;
+            const cvv = document.getElementById('cvv').value;
+            const billingAddress = document.getElementById('billingAddress').value;
+
+            if (!cardNumber || !cardType || !expirationDate || !cvv || !billingAddress) {
+                alert('Please fill in all the required fields.');
+            } else {
+                const cardDetails = `Card Number: ${cardNumber}\nCard Type: ${cardType}\nExpiration Date: ${expirationDate}\nCVV: ${cvv}\nBilling Address: ${billingAddress}`;
+                alert(`Card linked successfully!\n\n${cardDetails}`);
+                closeCardLinkPopup();
+            }
+        }
+
+        function linkToBank() {
+            const bankLinkPopup = document.getElementById('bankLinkPopup');
+            bankLinkPopup.style.display = 'block';
+        }
+
+        function closeBankLinkPopup() {
+            const bankLinkPopup = document.getElementById('bankLinkPopup');
+            bankLinkPopup.style.display = 'none';
+        }
+
+        function submitBankLink(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const bankName = document.getElementById('bankName').value;
+            const userName = document.getElementById('userName').value;
+            const accountType = document.getElementById('accountType').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+
+           
+            if (!bankName || !userName || !accountType || !accountNumber) {
+                alert('Please fill in all the required fields.');
+            } else {
+                const bankDetails = `Bank Name: ${bankName}\nUser's Name: ${userName}\nAccount Type: ${accountType}\nAccount Number: ${accountNumber}`;
+                alert(`Bank linked successfully!\n\n${bankDetails}`);
+
+                // Close the pop-up after successful submission
+                closeBankLinkPopup();
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+        let walletBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+        const walletBalanceDisplay = document.getElementById("walletBalanceDisplay");
+        walletBalanceDisplay.textContent = `Wallet Balance: SGD $${walletBalance.toFixed(2)}`;
+    });
+    </script>
+</body>
+
+</html>

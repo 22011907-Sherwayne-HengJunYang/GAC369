@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send and Request Money</title>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+        }
+
+        header {
+            background-color: #169BD7;
+            padding: 10px; 
+            color: white; 
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px; 
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none; 
+        }
+
+        .center-box {
+            width: 100%; 
+            max-width: 800px; 
+            margin: 30px auto; 
+            padding: 20px;
+            background-color: #f1f1f1; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+        }
+
+        .send-request-form {
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            margin-bottom: 20px; 
+        }
+
+        .send-request-form label,
+        .send-request-form input[type="text"],
+        .send-request-form input[type="number"],
+        .send-request-form button {
+            margin: 5px; 
+        }
+
+        .send-request-form input[type="text"],
+        .send-request-form input[type="number"] {
+            width: 150px; 
+            padding: 5px;
+        }
+
+        .send-request-form button {
+            padding: 8px 15px;
+            background-color: #169BD7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="text-decoration: none; color: white;">Welcome to My Financial Services</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="send_request.html">Send and Request</a></li>
+                <li><a href="wallet.html">Wallet</a></li>
+                <li><a href="transaction.html">Transactions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="center-box">
+            <div class="send-request-form">
+                <form>
+                    <label for="recipient">Recipient:</label>
+                    <input type="text" id="recipient" placeholder="Enter recipient's name">
+
+                    <label for="amountToSend">Amount to Send:</label>
+                    <input type="number" id="amountToSend" placeholder="Enter amount">
+
+                    <button type="button" onclick="sendMoney()">Send Money</button>
+                </form>
+
+                <form>
+                    <label for="requestFrom">Request from:</label>
+                    <input type="text" id="requestFrom" placeholder="Enter sender's name">
+
+                    <label for="amountToRequest">Amount to Request:</label>
+                    <input type="number" id="amountToRequest" placeholder="Enter amount">
+
+                    <button type="button" onclick="requestMoney()">Request Money</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function sendMoney() {
+            const recipient = document.getElementById('recipient').value;
+            const amountToSend = parseFloat(document.getElementById('amountToSend').value);
+
+            let accountBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+            if (amountToSend > accountBalance) {
+                alert("Send failed. Amount cannot exceed the account balance.");
+                return;
+            }
+
+            accountBalance -= amountToSend;
+            sessionStorage.setItem("accountBalance", accountBalance);
+
+            
+            alert(`Money sent to: ${recipient}\nAmount Sent: SGD $${amountToSend.toFixed(2)}`);
+        }
+
+        function requestMoney() {
+            const requestFrom = document.getElementById('requestFrom').value;
+            const amountToRequest = parseFloat(document.getElementById('amountToRequest').value);
+            alert(`Request Money from: ${requestFrom}\nAmount Requested: SGD $${amountToRequest.toFixed(2)}`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Currency</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+        }
+
+        header {
+            background-color: #169BD7;
+            padding: 10px; 
+            color: white; 
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px; 
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none; 
+        }
+
+       
+        .center-box {
+            width: 400px; 
+            margin: 30px auto; 
+            padding: 20px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+        }
+
+        .exchange-form {
+            display: flex; 
+            flex-wrap: wrap; 
+        }
+
+        .exchange-form label,
+        .exchange-form select,
+        .exchange-form input[type="number"],
+        .exchange-form button {
+            margin: 5px; 
+        }
+
+        .exchange-form select,
+        .exchange-form input[type="number"] {
+            width: 150px; 
+            padding: 5px;
+        }
+
+        .exchange-form button {
+            padding: 8px 15px;
+            background-color: #169BD7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><a href="index.html" style="text-decoration: none; color: white;">Welcome to My Financial Services</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="send_request.html">Send and Request</a></li>
+                <li><a href="wallet.html">Wallet</a></li>
+                <li><a href="transaction.html">Transactions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="center-box">
+            <form class="exchange-form">
+                <label for="sourceCurrency">From:</label>
+                <select id="sourceCurrency">
+                    <option value="SGD">SGD</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    
+                </select>
+
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" placeholder="Enter amount">
+
+                <label for="targetCurrency">To:</label>
+                <select id="targetCurrency">
+                    <option value="SGD">SGD</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+
+                <button type="button" onclick="exchangeCurrency()">Exchange</button>
+            </form>
+
+
+            <div class="result-box" id="resultBox">
+                <p><strong>Exchange Rate:</strong> 1 SGD = 0.74 USD</p>
+                <p><strong>Result:</strong> 50 SGD = 37 USD</p>
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+    </footer>
+
+    <script>
+        function exchangeCurrency() {
+            const sourceCurrency = document.getElementById('sourceCurrency').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const targetCurrency = document.getElementById('targetCurrency').value;
+
+            // Modify this part to update account balances
+            let accountBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+            let usdAccountBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
+            let eurAccountBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
+
+            const exchangeRate = {
+                "SGD": { "USD": 0.74, "EUR": 0.62 },
+                "USD": { "SGD": 1.35, "EUR": 0.84 },
+                "EUR": { "SGD": 1.61, "USD": 1.19 }
+            };
+
+            if (amount > accountBalance) {
+                alert("Exchange failed. Insufficient account balance.");
+                return;
+            }
+
+            const convertedAmount = amount * exchangeRate[sourceCurrency][targetCurrency];
+            
+            // Update account balances based on the exchange
+            accountBalance -= amount;
+            if (targetCurrency === "USD") {
+                usdAccountBalance += convertedAmount;
+            } else if (targetCurrency === "EUR") {
+                eurAccountBalance += convertedAmount;
+            }
+
+            sessionStorage.setItem("accountBalance", accountBalance);
+            sessionStorage.setItem("usdAccountBalance", usdAccountBalance);
+            sessionStorage.setItem("eurAccountBalance", eurAccountBalance);
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.innerHTML = `<p><strong>Exchange Rate:</strong> 1 ${sourceCurrency} = ${exchangeRate[sourceCurrency][targetCurrency]} ${targetCurrency}</p>
+                                   <p><strong>Result:</strong> ${amount} ${sourceCurrency} = ${convertedAmount.toFixed(2)} ${targetCurrency}</p>`;
+        }
+    </script>
+</body>
+</html>

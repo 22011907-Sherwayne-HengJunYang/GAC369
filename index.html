@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Financial Services</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: white;
+            margin: 0; 
+        }
+
+        header {
+            background-color: #169BD7;
+            padding: 10px; 
+            color: white; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px; 
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none; 
+        }
+
+        .account-box {
+            width: 500px;
+            margin: 30px auto; 
+            padding: 20px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+        }
+
+        .account-box-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+        }
+
+        .account-box a {
+            text-decoration: none; 
+        }
+
+        .account-box button {
+            flex: 1 1 0; 
+            padding: 10px;
+            margin-top: 10px;
+            margin-right: 5px; 
+            background-color: #169BD7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .account-box button i {
+            margin-right: 5px; 
+        }
+
+        .logout {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout button {
+            font-size: 20px;
+            background-color: #169BD7;
+            color: white;
+            border: none;
+            cursor: pointer;
+            align-items: center;
+        }
+
+        .credit-card {
+            color: #169BD7;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>Welcome to My Financial Services</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="send_request.html">Send and Request</a></li>
+                    <li><a href="wallet.html">Wallet</a></li>
+                    <li><a href="transaction.html">Transactions</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="logout">
+            <button class="logout-button" onclick="logout()"><i class="fas fa-sign-out-alt"></i>Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="account-box">
+            <h2>Account Balance</h2>
+            <p id="sgdBalance">Your current account balance is: SGD $0</p> 
+            <p id="usdBalance">Your current account balance is: USD $0</p> 
+            <p id="eurBalance">Your current account balance is: EUR $0</p> 
+            <div class="account-box-buttons">
+                <a href="add_funds.html"><button><i class="fas fa-plus-circle"></i>Add Funds</button></a>
+                <a href="currency_exchange.html?balance=1000"><button><i class="fas fa-exchange-alt"></i>Exchange Currency</button></a> 
+                <a href="receive_in_cash.html"><button><i class="fas fa-hand-holding-usd"></i>Receive in Cash</button></a>
+            </div>
+        </section>
+    </main>
+    <main>
+        <section class="account-box">
+            <h2>Recent Activity</h2>
+            <p>See when funds come in and go out. You can find your recent activity here.</p> 
+            <div class="account-box-buttons">
+                <a href="transaction.html"><button><i class="fa fa-window-restore"></i>See All</button></a>
+            </div>
+        </section>
+    </main>
+    <main>
+        <section class="account-box">
+            <h2>Bank Card and Cards Linked</h2>
+            <p><i class="fa fa-address-card credit-card"></i> Credit card: **** **** **** 1234 </p> 
+                
+        </section>
+    </main>
+
+    <footer>
+    </footer>
+
+    <script>
+        function logout() {
+            sessionStorage.removeItem("accountBalance");
+            sessionStorage.removeItem("usdAccountBalance");
+            sessionStorage.removeItem("eurAccountBalance");
+            window.location.href = "Login.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let sgdBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+            let usdBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
+            let eurBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
+
+            const sgdBalanceElement = document.querySelector(".account-box #sgdBalance");
+            const usdBalanceElement = document.querySelector(".account-box #usdBalance");
+            const eurBalanceElement = document.querySelector(".account-box #eurBalance");
+
+            sgdBalanceElement.textContent = `Your current account balance is: SGD $${sgdBalance.toFixed(2)}`;
+            usdBalanceElement.textContent = `Your current account balance is: USD $${usdBalance.toFixed(2)}`;
+            eurBalanceElement.textContent = `Your current account balance is: EUR $${eurBalance.toFixed(2)}`;
+        });
+    </script>
+</body>
+
+</html>

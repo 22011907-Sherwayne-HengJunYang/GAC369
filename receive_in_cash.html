@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receive in Cash</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: white;
+            margin: 0; 
+        }
+
+       
+        header {
+            background-color: #169BD7;
+            padding: 10px; 
+            color: white; 
+        }
+
+     
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px; 
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none; 
+        }
+
+        
+        .center-box {
+            width: 400px; 
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+        }
+
+       
+        .receive-form {
+            display: flex; 
+            flex-wrap: wrap; 
+        }
+
+        .receive-form label,
+        .receive-form input[type="number"],
+        .receive-form input[type="text"],
+        .receive-form button {
+            margin: 5px; 
+        }
+
+        .receive-form input[type="number"] {
+            width: 150px; 
+            padding: 5px;
+        }
+
+        .receive-form input[type="text"] {
+            width: 300px; 
+            padding: 5px;
+        }
+
+        .receive-form button {
+            padding: 8px 15px;
+            background-color: #169BD7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html" style="text-decoration: none; color: white;">Welcome to My Financial Services</a></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="send_request.html">Send and Request</a></li>
+                <li><a href="wallet.html">Wallet</a></li>
+                <li><a href="transaction.html">Transactions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="center-box">
+            <form class="receive-form">
+                <label for="amount">Amount to Receive:</label>
+                <input type="number" id="amount" placeholder="Enter amount">
+
+                <label for="address">Enter the 7-11 you're at:</label>
+                <input type="text" id="address" placeholder="Enter the 7-11 store location">
+
+                <button type="button" onclick="receiveInCash()">Receive</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function receiveInCash() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const address = document.getElementById('address').value.trim();
+    
+            if (!address) {
+                alert("Please enter the 7-11 store location.");
+                return;
+            }
+    
+            if (!amount) {
+                alert("Please enter a valid amount.");
+                return;
+            }
+    
+            let currentBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+            
+            if (amount > currentBalance) {
+                alert("Receive failed. Amount cannot exceed the account balance.");
+                return;
+            }
+    
+            currentBalance -= amount;
+            sessionStorage.setItem("accountBalance", currentBalance);
+    
+            alert(`Received in Cash: SGD $${amount.toFixed(2)}\n7-11 Store Location: ${address}`);
+            
+            // Update the displayed balance on the page
+            const balanceElement = document.querySelector(".account-box p");
+            balanceElement.textContent = `Your current account balance is: SGD $${currentBalance.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
