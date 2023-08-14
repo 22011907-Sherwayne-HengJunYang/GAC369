@@ -271,54 +271,34 @@
             if (!cardNumber || !cardType || !expirationDate || !cvv || !billingAddress) {
                 alert('Please fill in all the required fields.');
             } else {
-                const cardDetails = `Card Number: ${cardNumber}\nCard Type: ${cardType}\nExpiration Date: ${expirationDate}\nCVV: ${cvv}\nBilling Address: ${billingAddress}`;
-                alert(`Card linked successfully!\n\n${cardDetails}`);
-                closeCardLinkPopup();
-            }
-        }
+                const cardDetails = {
+                    cardNumber: maskCardNumber(cardNumber), // Call a function to mask the card number
+                    cardType: cardType,
+                    expirationDate: expirationDate,
+                    cvv: cvv,
+                    billingAddress: billingAddress
+                };
 
-        function linkToBank() {
-            const bankLinkPopup = document.getElementById('bankLinkPopup');
-            bankLinkPopup.style.display = 'block';
-        }
+        // Retrieve existing linked cards from session storage
+        let linkedCards = JSON.parse(sessionStorage.getItem("linkedCards")) || [];
+        linkedCards.push(cardDetails);
 
-        function closeBankLinkPopup() {
-            const bankLinkPopup = document.getElementById('bankLinkPopup');
-            bankLinkPopup.style.display = 'none';
-        }
+        // Store the updated linked cards array in session storage
+        sessionStorage.setItem("linkedCards", JSON.stringify(linkedCards));
 
-        function submitCardLink(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-
-        const cardNumber = document.getElementById('cardNumber').value;
-        const cardType = document.getElementById('cardType').value;
-        const expirationDate = document.getElementById('expirationDate').value;
-        const cvv = document.getElementById('cvv').value;
-        const billingAddress = document.getElementById('billingAddress').value;
-
-        if (!cardNumber || !cardType || !expirationDate || !cvv || !billingAddress) {
-            alert('Please fill in all the required fields.');
-        } else {
-            const cardDetails = {
-                cardNumber: cardNumber,
-                cardType: cardType,
-                expirationDate: expirationDate,
-                cvv: cvv,
-                billingAddress: billingAddress
-            };
-
-            // Retrieve existing linked cards from session storage
-            let linkedCards = JSON.parse(sessionStorage.getItem("linkedCards")) || [];
-            linkedCards.push(cardDetails);
-
-            // Store the updated linked cards array in session storage
-            sessionStorage.setItem("linkedCards", JSON.stringify(linkedCards));
-
-            // Close the pop-up after successful submission
-            closeCardLinkPopup();
-            updateLinkedCardSection(); // Update the displayed linked card numbers
-        }
+        // Close the pop-up after successful submission
+        closeCardLinkPopup();
+        updateLinkedCardSection(); // Update the displayed linked card numbers
     }
+}
+
+    // Function to mask the card number and display only the last four digits
+    function maskCardNumber(cardNumber) {
+        const visibleDigits = 4;
+        const maskedDigits = cardNumber.slice(-visibleDigits).padStart(cardNumber.length, '*');
+        return maskedDigits;
+    }
+
         document.addEventListener("DOMContentLoaded", function () {
         let walletBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
         const walletBalanceDisplay = document.getElementById("walletBalanceDisplay");

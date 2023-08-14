@@ -149,45 +149,55 @@
     </footer>
 
     <script>
-        function exchangeCurrency() {
-            const sourceCurrency = document.getElementById('sourceCurrency').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            const targetCurrency = document.getElementById('targetCurrency').value;
+     function exchangeCurrency() {
+    const sourceCurrency = document.getElementById('sourceCurrency').value;
+    const amount = parseFloat(document.getElementById('amount').value);
+    const targetCurrency = document.getElementById('targetCurrency').value;
 
-            // Modify this part to update account balances
-            let accountBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
-            let usdAccountBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
-            let eurAccountBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
+    // Modify this part to update account balances
+    let accountBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+    let usdAccountBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
+    let eurAccountBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
 
-            const exchangeRate = {
-                "SGD": { "USD": 0.74, "EUR": 0.62 },
-                "USD": { "SGD": 1.35, "EUR": 0.84 },
-                "EUR": { "SGD": 1.61, "USD": 1.19 }
-            };
+    const exchangeRate = {
+        "SGD": { "USD": 0.74, "EUR": 0.62 },
+        "USD": { "SGD": 1.35, "EUR": 0.84 },
+        "EUR": { "SGD": 1.61, "USD": 1.19 }
+    };
 
-            if (amount > accountBalance) {
-                alert("Exchange failed. Insufficient account balance.");
-                return;
-            }
+    const convertedAmount = amount * exchangeRate[sourceCurrency][targetCurrency];
 
-            const convertedAmount = amount * exchangeRate[sourceCurrency][targetCurrency];
-            
-            // Update account balances based on the exchange
-            accountBalance -= amount;
-            if (targetCurrency === "USD") {
-                usdAccountBalance += convertedAmount;
-            } else if (targetCurrency === "EUR") {
-                eurAccountBalance += convertedAmount;
-            }
+    if (sourceCurrency === "SGD" && amount > accountBalance) {
+        alert("Exchange failed. Insufficient account balance.");
+        return;
+    }
 
-            sessionStorage.setItem("accountBalance", accountBalance);
-            sessionStorage.setItem("usdAccountBalance", usdAccountBalance);
-            sessionStorage.setItem("eurAccountBalance", eurAccountBalance);
+    // Update account balances based on the exchange
+    if (sourceCurrency === "SGD") {
+        accountBalance -= amount;
+    } else if (sourceCurrency === "USD"){
+        usdAccountBalance -= amount;
+    } else if (sourceCurrency === "EUR"){
+        eurAccountBalance -= amount;
+    }
 
-            const resultBox = document.getElementById('resultBox');
-            resultBox.innerHTML = `<p><strong>Exchange Rate:</strong> 1 ${sourceCurrency} = ${exchangeRate[sourceCurrency][targetCurrency]} ${targetCurrency}</p>
-                                   <p><strong>Result:</strong> ${amount} ${sourceCurrency} = ${convertedAmount.toFixed(2)} ${targetCurrency}</p>`;
-        }
+    if (targetCurrency === "USD") {
+        usdAccountBalance += convertedAmount;
+    } else if (targetCurrency === "EUR") {
+        eurAccountBalance += convertedAmount;
+    } else if (targetCurrency === "SGD"){
+        accountBalance += convertedAmount;
+    }
+
+    sessionStorage.setItem("accountBalance", accountBalance);
+    sessionStorage.setItem("usdAccountBalance", usdAccountBalance);
+    sessionStorage.setItem("eurAccountBalance", eurAccountBalance);
+
+    const resultBox = document.getElementById('resultBox');
+    resultBox.innerHTML = `<p><strong>Exchange Rate:</strong> 1 ${sourceCurrency} = ${exchangeRate[sourceCurrency][targetCurrency]} ${targetCurrency}</p>
+                           <p><strong>Result:</strong> ${amount} ${sourceCurrency} = ${convertedAmount.toFixed(2)} ${targetCurrency}</p>`;
+}
+
     </script>
 </body>
 </html>

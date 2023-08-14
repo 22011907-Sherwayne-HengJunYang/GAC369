@@ -167,10 +167,22 @@
             const fundsOutBtn = document.getElementById("fundsOutBtn");
 
             fundsInBtn.addEventListener("click", function () {
+                const linkedCards = JSON.parse(sessionStorage.getItem("linkedCards"));
+                if (!linkedCards || linkedCards.length === 0) {
+                    alert("Please link a card before adding funds.");
+                    return;
+                }
+                
                 promptAmountAndTransfer("add funds");
             });
 
             fundsOutBtn.addEventListener("click", function () {
+                const linkedCards = JSON.parse(sessionStorage.getItem("linkedCards"));
+                if (!linkedCards || linkedCards.length === 0) {
+                    alert("Please link a card before transfering funds.");
+                    return;
+                }
+
                 promptAmountAndTransfer("transfer funds");
             });
         });

@@ -143,7 +143,7 @@
             <p id="eurBalance">Your current account balance is: EUR $0</p> 
             <div class="account-box-buttons">
                 <a href="add_funds.html"><button><i class="fas fa-plus-circle"></i>Add Funds</button></a>
-                <a href="currency_exchange.html?balance=1000"><button><i class="fas fa-exchange-alt"></i>Exchange Currency</button></a> 
+                <a href="currency_exchange.html"><button><i class="fas fa-exchange-alt"></i>Exchange Currency</button></a> 
                 <a href="receive_in_cash.html"><button><i class="fas fa-hand-holding-usd"></i>Receive in Cash</button></a>
             </div>
         </section>
@@ -179,19 +179,21 @@
         }
 
         function updateLinkedCardSection() {
-        const linkedCards = JSON.parse(sessionStorage.getItem("linkedCards")) || [];
-        const linkedCardList = document.getElementById("linkedCardList");
+            const linkedCards = JSON.parse(sessionStorage.getItem("linkedCards")) || [];
+            const linkedCardList = document.getElementById("linkedCardList");
 
-        linkedCardList.innerHTML = ""; // Clear existing content
+            // Clear the existing list
+            linkedCardList.innerHTML = "";
 
-        linkedCards.forEach((cardDetails, index) => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `<i class="fa fa-address-card credit-card"></i> Credit card: ${cardDetails.cardNumber}`;
-            linkedCardList.appendChild(listItem);
-        });
-    }
+            // Iterate through linked cards and display them
+            linkedCards.forEach((card, index) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Card ${index + 1}: **** **** **** ${card.cardNumber}`;
+                linkedCardList.appendChild(listItem);
+            });
+        }
 
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
         let sgdBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
         let usdBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
         let eurBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
