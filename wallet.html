@@ -268,25 +268,38 @@
             bankLinkPopup.style.display = 'none';
         }
 
-        function submitBankLink(event) {
-            event.preventDefault(); // Prevent the default form submission behavior
+        function submitCardLink(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
 
-            const bankName = document.getElementById('bankName').value;
-            const userName = document.getElementById('userName').value;
-            const accountType = document.getElementById('accountType').value;
-            const accountNumber = document.getElementById('accountNumber').value;
+        const cardNumber = document.getElementById('cardNumber').value;
+        const cardType = document.getElementById('cardType').value;
+        const expirationDate = document.getElementById('expirationDate').value;
+        const cvv = document.getElementById('cvv').value;
+        const billingAddress = document.getElementById('billingAddress').value;
 
-           
-            if (!bankName || !userName || !accountType || !accountNumber) {
-                alert('Please fill in all the required fields.');
-            } else {
-                const bankDetails = `Bank Name: ${bankName}\nUser's Name: ${userName}\nAccount Type: ${accountType}\nAccount Number: ${accountNumber}`;
-                alert(`Bank linked successfully!\n\n${bankDetails}`);
+        if (!cardNumber || !cardType || !expirationDate || !cvv || !billingAddress) {
+            alert('Please fill in all the required fields.');
+        } else {
+            const cardDetails = {
+                cardNumber: cardNumber,
+                cardType: cardType,
+                expirationDate: expirationDate,
+                cvv: cvv,
+                billingAddress: billingAddress
+            };
 
-                // Close the pop-up after successful submission
-                closeBankLinkPopup();
-            }
+            // Retrieve existing linked cards from session storage
+            let linkedCards = JSON.parse(sessionStorage.getItem("linkedCards")) || [];
+            linkedCards.push(cardDetails);
+
+            // Store the updated linked cards array in session storage
+            sessionStorage.setItem("linkedCards", JSON.stringify(linkedCards));
+
+            // Close the pop-up after successful submission
+            closeCardLinkPopup();
+            updateLinkedCardSection(); // Update the displayed linked card numbers
         }
+    }
         document.addEventListener("DOMContentLoaded", function () {
         let walletBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
         const walletBalanceDisplay = document.getElementById("walletBalanceDisplay");

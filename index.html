@@ -141,9 +141,11 @@
     <main>
         <section class="account-box">
             <h2>Bank Card and Cards Linked</h2>
-            <p><i class="fa fa-address-card credit-card"></i> Credit card: **** **** **** 1234 </p> 
-                
+            <ul id="linkedCardList">
+                <!-- Linked card items will be added dynamically here -->
+            </ul>
         </section>
+    </section>
     </main>
 
     <footer>
@@ -157,19 +159,34 @@
             window.location.href = "Login.html";
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            let sgdBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
-            let usdBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
-            let eurBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
+        function updateLinkedCardSection() {
+        const linkedCards = JSON.parse(sessionStorage.getItem("linkedCards")) || [];
+        const linkedCardList = document.getElementById("linkedCardList");
 
-            const sgdBalanceElement = document.querySelector(".account-box #sgdBalance");
-            const usdBalanceElement = document.querySelector(".account-box #usdBalance");
-            const eurBalanceElement = document.querySelector(".account-box #eurBalance");
+        linkedCardList.innerHTML = ""; // Clear existing content
 
-            sgdBalanceElement.textContent = `Your current account balance is: SGD $${sgdBalance.toFixed(2)}`;
-            usdBalanceElement.textContent = `Your current account balance is: USD $${usdBalance.toFixed(2)}`;
-            eurBalanceElement.textContent = `Your current account balance is: EUR $${eurBalance.toFixed(2)}`;
+        linkedCards.forEach((cardDetails, index) => {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `<i class="fa fa-address-card credit-card"></i> Credit card: ${cardDetails.cardNumber}`;
+            linkedCardList.appendChild(listItem);
         });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let sgdBalance = parseFloat(sessionStorage.getItem("accountBalance")) || 0;
+        let usdBalance = parseFloat(sessionStorage.getItem("usdAccountBalance")) || 0;
+        let eurBalance = parseFloat(sessionStorage.getItem("eurAccountBalance")) || 0;
+
+        const sgdBalanceElement = document.querySelector(".account-box #sgdBalance");
+        const usdBalanceElement = document.querySelector(".account-box #usdBalance");
+        const eurBalanceElement = document.querySelector(".account-box #eurBalance");
+
+        sgdBalanceElement.textContent = `Your current account balance is: SGD $${sgdBalance.toFixed(2)}`;
+        usdBalanceElement.textContent = `Your current account balance is: USD $${usdBalance.toFixed(2)}`;
+        eurBalanceElement.textContent = `Your current account balance is: EUR $${eurBalance.toFixed(2)}`;
+
+        updateLinkedCardSection(); // Display the linked card numbers
+    });
     </script>
 </body>
 
